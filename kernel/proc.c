@@ -114,6 +114,7 @@ allocproc(void)
       release(&p->lock);
     }
   }
+  p->tracemask = 0;
   return 0;
 
 found:
@@ -280,7 +281,7 @@ fork(void)
   if((np = allocproc()) == 0){
     return -1;
   }
-
+  np->tracemask = p->tracemask;
   // Copy user memory from parent to child.
   if(uvmcopy(p->pagetable, np->pagetable, p->sz) < 0){
     freeproc(np);
